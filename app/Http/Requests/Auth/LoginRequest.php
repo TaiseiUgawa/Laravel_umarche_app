@@ -45,6 +45,7 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // $guard の中身を各リクエストによって入れ替える分岐処理
         if($this->routeIs('owner.*')){
             $guard = 'owners';
         } elseif($this->routeIs('admin.*')){
@@ -53,6 +54,7 @@ class LoginRequest extends FormRequest
             $guard = 'users';
         }
 
+        // 分岐処理後の認証
         if (! Auth::guard($guard)->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
