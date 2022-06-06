@@ -49,6 +49,8 @@
                 @endforeach
                 </tbody>
             </table>
+            {{-- ページネイト --}}
+            {{ $owners->links() }}
             </div>
         </div>
     </section>
