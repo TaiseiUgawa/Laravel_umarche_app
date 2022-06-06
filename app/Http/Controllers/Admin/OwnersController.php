@@ -44,7 +44,7 @@ class OwnersController extends Controller
         // dd($e_all, $q_get, $q_first, $c_test);
 
         // Eloquentで指定したカラムデータ取得
-        $owners = Owner::select('name', 'email', 'created_at')->get();
+        $owners = Owner::select('id', 'name', 'email', 'created_at')->get();
         return view('admin.owners.index',
         compact('owners'));
     }
@@ -86,7 +86,7 @@ class OwnersController extends Controller
 
         // 登録後のリダイレクト処理
         return redirect()->route('admin.owners.index')
-        ->with('message', 'オーナー登録を実施しました。'); //フラッシュメーセージ　Vue.js実装検討
+        ->with('message', 'オーナー登録を実施しました。'); //フラッシュメーセージ　Vue.js実装検討4
 
     }
 
@@ -109,7 +109,11 @@ class OwnersController extends Controller
      */
     public function edit($id)
     {
-        //
+        // $idがあれば代入　なければ 404
+        $owner = Owner::findOrFail($id);
+        // dd($owner);
+
+        return view('admin.owners.edit', compact('owner'));
     }
 
     /**
@@ -122,6 +126,15 @@ class OwnersController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $owner = Owner::findOrFail($id);
+        $owner->name = $request->name;
+        $owner->email = $request->email;
+        $owner->password = Hash::make($request->password);
+        $owner->save();
+
+        return redirect()->route('admin.owners.index')
+        ->with('message', 'オーナー情報を更新しました。');
+
     }
 
     /**
