@@ -30,6 +30,15 @@ Route::get('/', function () {
 Route::resource('owners', OwnersController::class)
 ->middleware('auth:admin');
 
+//デリートルート設定
+Route::prefix('expired-owners')->
+middleware('auth:admin')->group(function(){
+    // ソフトデリート
+    Route::get('index', [OwnersController::class, 'expiredOwnerIndex'])->name('expired-owners.index');
+    // 完全に削除
+    Route::post('destroy/{owner}', [OwnersController::class, 'expiredOwnerDestroy'])->name('expired-owners.destroy');
+});
+
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth:admin'])->name('dashboard');
