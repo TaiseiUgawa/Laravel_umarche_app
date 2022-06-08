@@ -36,7 +36,7 @@ middleware('auth:owners')->group(function(){
 
 });
 
-Route::resource('images', ImagesController::class)
+Route::resource('images', ImageController::class)
 ->middleware('auth:owners')->except(['show']);
 
 Route::get('/dashboard', function () {

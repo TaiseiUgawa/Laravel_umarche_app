@@ -17,9 +17,13 @@
                     <x-nav-link :href="route('owner.dashboard')" :active="request()->routeIs('owner.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-
+                    {{-- 店舗情報  --}}
                     <x-nav-link :href="route('owner.shops.index')" :active="request()->routeIs('owner.shops.index')">
                         店舗情報
+                    </x-nav-link>
+                    {{-- 商品情報  --}}
+                    <x-nav-link :href="route('owner.images.index')" :active="request()->routeIs('owner.images.index')">
+                        商品情報
                     </x-nav-link>
                 </div>
             </div>
@@ -73,10 +77,16 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
-
+        {{-- 店舗情報 --}}
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('owner.shops.index')" :active="request()->routeIs('owner.shops.index')">
               　店舗情報
+            </x-responsive-nav-link>
+        </div>
+        {{-- 画像管理 --}}
+        <div class="pt-2 pb-3 space-y-1">
+            <x-responsive-nav-link :href="route('owner.images.index')" :active="request()->routeIs('owner.iamges.index')">
+                　画像管理
             </x-responsive-nav-link>
         </div>
 
