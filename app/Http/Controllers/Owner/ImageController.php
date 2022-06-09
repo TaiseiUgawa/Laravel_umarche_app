@@ -24,6 +24,7 @@ class ImageController extends Controller
 
             //
             $id = $request->route()->parameter('image');
+
             if(!is_null($id))
             {
                 $imageOwnerId = Image::findOrFail($id)->owner->id;
@@ -49,6 +50,7 @@ class ImageController extends Controller
         ->orderBy('created_at', 'desc')
         ->paginate(20);
 
+        // IndexViewに遷移
         return view('owner.images.index',
         compact('images'));
     }
