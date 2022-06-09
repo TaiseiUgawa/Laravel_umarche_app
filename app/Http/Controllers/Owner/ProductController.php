@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Owner;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
+use App\Models\Image;
 use App\Models\Owner;
-use App\Models\Product;
 use App\Models\Shop;
+use App\Models\Product;
+use App\Models\PrimaryCategory;
 
 class ProductController extends Controller
 {
@@ -61,7 +64,23 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        //必要データ取得
+        $shops = Shop::where('owner_id', Auth::id())
+        ->select('id', 'name')
+        ->get();
+
+        $images = Image::where('owner_id', Auth::id())
+        ->select('id', 'title', 'filename')
+        ->orderBy('updated_at', 'desc')
+        ->get();
+
+        // n + 1問題改善
+        $categories = PrimaryCategory::with('secondary')
+        ->get();
+
+        return view('owner.products.create',
+        compact('shops', 'images', 'categories'));
+
     }
 
     /**
