@@ -55,7 +55,7 @@ class ShopController extends Controller
     // 編集処理
     public function edit($id)
     {
-        
+
         $shop = Shop::findOrFail($id);
         // dd(Shop::findOrFail($id));
 
