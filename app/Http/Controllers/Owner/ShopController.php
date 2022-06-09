@@ -16,6 +16,7 @@ class ShopController extends Controller
     //
     public function __construct()
     {
+        // 認証情報
         $this->middleware('auth:owners');
 
         #クロージャー
@@ -40,9 +41,9 @@ class ShopController extends Controller
         });
     }
 
+    // インデックス処理
     public function index()
     {
-
 
         $ownerId = Auth::id();
         $shops = Shop::where('owner_id', $ownerId)->get();
@@ -51,8 +52,10 @@ class ShopController extends Controller
         compact('shops'));
     }
 
+    // 編集処理
     public function edit($id)
     {
+        
         $shop = Shop::findOrFail($id);
         // dd(Shop::findOrFail($id));
 
