@@ -1,6 +1,6 @@
 @php
     // 渡される属性によってパス変更
-    if($type === 'product'){
+    if($type === 'products'){
         $path = 'storage/products/';
     }
     if($type === 'shops'){

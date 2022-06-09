@@ -100,10 +100,10 @@ class ImageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
+    // public function show($id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -113,7 +113,11 @@ class ImageController extends Controller
      */
     public function edit($id)
     {
-        //
+        // DBデータ取得
+        $image = Image::findOrFail($id);
+
+        // EditViewに遷移
+        return view('owner.images.edit', compact('image'));
     }
 
     /**
@@ -125,7 +129,22 @@ class ImageController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //更新情報バリデーション
+        $request->validate([
+            // 今回はタイトルのみ
+            'title' => ['required', 'string', 'max:50'],
+        ]);
+
+        // ID取得しているDB情報持ってくる && 変更保存処理
+        $image = Image::findOrFail($id);
+        $image->title = $request->title;
+        $image->save();
+
+        // リダイレクト && フラメ処理
+        return redirect()
+        ->route('owner.images.index')
+        ->with(['message' => '画像タイトルを更新しました。',
+        'status' => 'info']);
     }
 
     /**
