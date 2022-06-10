@@ -206,10 +206,10 @@ class ProductController extends Controller
                     $product->save();
 
                     // 在庫
-                    if($request->type === '1'){ //増加
+                    if($request->type === \Constant::PRODUCT_LIST['add']){ //増加
                         $newQuantity = $request->quantity;
                     }
-                    if($request->type === '2'){ //削減
+                    if($request->type === \Constant::PRODUCT_LIST['reduce']){ //削減
                         $newQuantity = $request->quantity * -1;
                     }
 
