@@ -15,6 +15,11 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->text('information');
+            $table->unsignedInteger('price');
+            $table->boolean('is_selling');
+            $table->integer('sort_order')->nullable();
             $table->foreignId('shop_id')
             ->constrained()
             // CRUD時、親が変更されたら外部キー側も追記
@@ -25,6 +30,15 @@ class CreateProductsTable extends Migration
             ->constrained();
 
             $table->foreignId('image1')
+            ->nullable()
+            ->constrained('images');
+            $table->foreignId('image2')
+            ->nullable()
+            ->constrained('images');
+            $table->foreignId('image3')
+            ->nullable()
+            ->constrained('images');
+            $table->foreignId('image4')
             ->nullable()
             ->constrained('images');
             $table->timestamps();
