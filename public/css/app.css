@@ -839,6 +839,10 @@ select {
   margin-left: auto;
   margin-right: auto;
 }
+.my-8 {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -958,6 +962,9 @@ select {
 .h-full {
   height: 100%;
 }
+.h-40 {
+  height: 10rem;
+}
 .h-1 {
   height: 0.25rem;
 }
@@ -1002,6 +1009,9 @@ select {
 }
 .w-10 {
   width: 2.5rem;
+}
+.w-40 {
+  width: 10rem;
 }
 .w-48 {
   width: 12rem;
@@ -1243,6 +1253,10 @@ select {
 }
 .fill-current {
   fill: currentColor;
+}
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .p-6 {
   padding: 1.5rem;
