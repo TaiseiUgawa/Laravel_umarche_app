@@ -51,4 +51,14 @@ class CartController extends Controller
 
     }
 
+    public function delete($id)
+    {
+        // 対象データ削除
+        Cart::where('product_id', $id)
+        ->where('user_id', Auth::id())
+        ->delete();
+
+        return redirect()->route('user.cart.index');
+    }
+
 }
