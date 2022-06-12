@@ -13,7 +13,7 @@ class CartController extends Controller
     //
     public function index()
     {
-        // ログインユーザーが持っている商品情報
+        // ログインユーザーが持っているカート情報
         $user = User::findOrFail(Auth::id());
         $products = $user->products;
         // カート内の商品合計金額　
@@ -59,6 +59,45 @@ class CartController extends Controller
         ->delete();
 
         return redirect()->route('user.cart.index');
+    }
+
+    // 決済処理
+    public function checkout()
+    {
+        // ログインユーザーが持っているカート情報
+        $user = User::findOrFail(Auth::id());
+        $products = $user->products;
+
+        // Stripeライブラリに渡すデータ取得
+        $lineItems = [];
+        foreach($products as $product)
+        {
+            $lineItem = [
+                'name' => $product->name,
+                'description' => $product->information,
+                'amount' => $product->price,
+                'currency' => 'jpy',
+                'quantity' => $product->pivot->quantity,
+            ];
+            array_push($lineItems, $lineItem);
+
+            // This is your test secret API key.
+            \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+
+            // セッション情報
+            $checkout_session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [$lineItems],
+                'mode' => 'payment',
+                'success_url' => route('user.items.index'),
+                'cancel_url' => route('user.cart.index'),
+            ]);
+            // 公開鍵
+            $publicKey = env('STRIPE_PUBLIC_KEY');
+
+            return view('user.checkout',
+            compact('checkout_session','publicKey'));
+        }
     }
 
 }
