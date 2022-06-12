@@ -12,38 +12,38 @@
                     <div class="md:flex md:justify-around">
                         <div class="md:w-1/2">
                             <!-- Slider main container -->
-                            <div class="swiper">
+                            <div class="swiper-container">
                                 <!-- Additional required wrapper -->
                                 <div class="swiper-wrapper">
-                                <!-- Slides -->
-                                <div class="swiper-slide">
-                                    @if( optional($product->iamgeFirst)->filename !== null)
-                                        <img src="{{ asset('storage/products/' . $product->imageFirst->filename) }}" >
-                                    @else
-                                        <img src="" >
-                                    @endif
-                                </div>
-                                <div class="swiper-slide">
-                                    @if( optional($product->iamgeSecond)->filename !== null)
-                                        <img src="{{ asset('storage/products/' . $product->imageSecond->filename) }}" >
-                                    @else
-                                        <img src="" >
-                                    @endif
-                                </div>
-                                <div class="swiper-slide">
-                                    @if( optional($product->iamgeThird)->filename !== null)
-                                        <img src="{{ asset('storage/products/' . $product->imageThird->filename) }}" >
-                                    @else
-                                        <img src="" >
-                                    @endif
-                                </div>
-                                <div class="swiper-slide">
-                                    @if( optional($product->iamgeFourth)->filename !== null)
-                                        <img src="{{ asset('storage/products/' . $product->imageFourth->filename) }}" >
-                                    @else
-                                        <img src="" >
-                                    @endif
-                                </div>
+                                    <!-- Slides -->
+                                    <div class="swiper-slide">
+                                        @if(isset($product->imageFirst->filename))
+                                            <img src="{{ asset('storage/products/' . $product->imageFirst->filename) }}" >
+                                        @else
+                                            <img src="" >
+                                        @endif
+                                    </div>
+                                    <div class="swiper-slide">
+                                        @if(isset($product->imageSecond->filename))
+                                            <img src="{{ asset('storage/products/' . $product->imageSecond->filename) }}" >
+                                        @else
+                                            <img src="" >
+                                        @endif
+                                    </div>
+                                    <div class="swiper-slide">
+                                        @if(isset($product->imageThird->filename))
+                                            <img src="{{ asset('storage/products/' . $product->imageThird->filename) }}" >
+                                        @else
+                                            <img src="" >
+                                        @endif
+                                    </div>
+                                    <div class="swiper-slide">
+                                        @if(isset($product->imageFourth->filename))
+                                            <img src="{{ asset('storage/products/' . $product->imageFourth->filename) }}" >
+                                        @else
+                                            <img src="" >
+                                        @endif
+                                    </div>
                                 </div>
                                 <!-- If we need pagination -->
                                 <div class="swiper-pagination"></div>
@@ -71,13 +71,12 @@
                                 </div>
                                 {{-- 数量 --}}
                                 <div class="flex ml-6 items-center">
-                                    <span class="mr-3">Size</span>
+                                    <span class="mr-3">数量</span>
                                     <div class="relative">
-                                      <select class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 text-base pl-3 pr-10">
-                                        <option>SM</option>
-                                        <option>M</option>
-                                        <option>L</option>
-                                        <option>XL</option>
+                                      <select name="quantity" class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-500 text-base pl-3 pr-10">
+                                        @for($i = 0; $i <= $quantity ; $i++)
+                                            <option value="{{ $i }}">{{ $i }}</option>
+                                        @endfor
                                       </select>
                                       <span class="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
                                         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4" viewBox="0 0 24 24">
@@ -118,6 +117,7 @@
             </div>
         </div>
     </div>
+    {{-- 店舗情報modal --}}
     <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
         <div class="modal__overlay" tabindex="-1" data-micromodal-close>
           <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
@@ -137,6 +137,7 @@
             </footer>
           </div>
         </div>
-      </div>
+    </div>
+    {{-- script --}}
     <script src="{{ mix('js/swiper.js') }}"></script>
 </x-app-layout>
