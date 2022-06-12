@@ -5,11 +5,27 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     //
+    public function index()
+    {
+        // ログインユーザーが持っている商品情報
+        $user = User::findOrFail(Auth::id());
+        $products = $user->products;
+        // カート内の商品合計金額　
+        $totalPrice = 0;
+
+        foreach ($products as $product) {
+            $totalPrice += $product->price * $product->pivot->quantity;
+        }
+        dd($products, $totalPrice);
+        return view('user.cart.index', compact('products', 'totalPrice'));
+    }
+
     public function add(Request $request)
     {
         //判定に必要なデータを一件格納する
@@ -30,7 +46,9 @@ class CartController extends Controller
                 'quantity' => $request->quantity,
             ]);
         }
-        dd('テスト');
+
+        return redirect()->route('user.cart.index');
+
     }
 
 }
