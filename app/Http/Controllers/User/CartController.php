@@ -73,12 +73,13 @@ class CartController extends Controller
         $lineItems = [];
         foreach($products as $product)
         {
-            $quantity = '';
+
             $quantity = Stock::where('product_id', $product->id)->sum('quantity');
+
 
             // 決済前在庫確認処理
             if($product->pivot->quantity > $quantity){
-                return ridirect()->route('user.cart.index');
+                return redirect()->route('user.cart.index');
             } else {
 
                 $lineItem = [
@@ -100,7 +101,7 @@ class CartController extends Controller
                 ]);
             }
 
-            dd('test');
+
 
 
             // This is your test secret API key.

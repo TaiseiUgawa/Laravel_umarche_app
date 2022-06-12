@@ -12,6 +12,7 @@
                     @if(count($products) > 0)
                         @foreach ($products as $product)
                         <div class="mb:flex mb:items-center mb-2">
+                            {{-- 商品画像 --}}
                             <div class="mb:w-3/12">
                                 @if(isset($product->imageFirst->filename))
                                     <img src="{{ asset('storage/products/' . $product->imageFirst->filename) }}" >
@@ -20,12 +21,14 @@
                                 @endif
                             </div>
                             <div class="mb:w-4/12 mb:ml-2">{{ $product->name }}</div>
+                            {{-- 個数、金額 --}}
                             <div class="mb:w-3/12 flex justify-around">
                                 <div>{{ $product->pivot->quantity }}個</div>
                                 <div>{{ number_format($product->pivot->quantity * $product->price) }}
                                     <span class="text-sm text-gray-700">円(税込)</span>
                                 </div>
                             </div>
+                            {{-- 削除ボタン --}}
                             <div class="mb:w-2/12">
                                 <form method='post' action="{{ route('user.cart.delete' , ['item' => $product->id]) }}">
                                     @csrf
@@ -36,6 +39,14 @@
                             </div>
                         </div>
                         @endforeach
+                        {{-- カートの合計金額 --}}
+                        <div class="my-2">
+                            小計:{{ number_format($totalPrice) }}
+                            <span class="text-sm text-gray-700">円(税込)</span>
+                        </div>
+                        <div>
+                            <button onclick="location.href='{{ route('user.cart.checkout') }}'"　class="flex ml-auto text-white bg-blue-500 border-0 py-2 px-6 focus:outline-none hover:bg-blue-600 rounded">購入する</button>
+                        </div>
                     @else
                         カートに商品が入っていません
                     @endif
