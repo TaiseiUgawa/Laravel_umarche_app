@@ -123,14 +123,17 @@ class CartController extends Controller
     // 決済完了後の処理
     public function success()
     {
+        // メール送信機能
         $items = Cart::where('user_id', Auth::id())->get();
         $products = CartService::getItemsInCart($items);
         $user = User::findOrFail(Auth::id());
-
+        // ユーザー側
         SendThanksMail::dispatch($products, $user);
+        // 店舗オーナー側
         foreach ($products as $product ) {
             SendOrderedMail::dispatch($product, $user);
         }
+        // カート情報削除
         Cart::where('user_id', Auth::id())->delete();
 
         return redirect()->route('user.items.index');
@@ -142,7 +145,6 @@ class CartController extends Controller
         $user = User::findOrFail(Auth::id());
 
         foreach ($user->products as $product ) {
-
             Stock::create([
                 'product_id' => $product->id,
                 'type' => \Constant::PRODUCT_LIST['add'],
