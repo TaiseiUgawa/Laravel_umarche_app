@@ -21,31 +21,16 @@ class OwnersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // コントローラー側の認証
+
     public function __construct()
     {
+        // コントローラー側の認証
         $this->middleware('auth:admin');
     }
 
 
     public function index()
     {
-        //
-        // $data_now = Carbon::now();
-        // $data_parse = Carbon::parse(now());
-        // echo $data_now->year;
-        // echo $data_parse;
-
-        // $e_all = Owner::all();
-        // $q_get = DB::table('owners')->select('name', 'created_at')->get();
-        // // $q_first = DB::table('owners')->select('name')->first();
-
-        // $c_test = collect([
-        //     'name' => 'テスト',
-        // ]);
-
-        // dd($e_all, $q_get, $q_first, $c_test);
-
         // Eloquentで指定したカラムデータ取得
         $owners = Owner::select('id', 'name', 'email', 'created_at')
         ->paginate(3);
@@ -105,15 +90,6 @@ class OwnersController extends Controller
             throw $e;
         }
 
-        // 入力データをDBに登録
-        // Owner::create([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        // ]);
-
-
-
         // 登録後のリダイレクト処理
         return redirect()->route('admin.owners.index')
         ->with(['message' => 'オーナー登録を実施しました。',
@@ -142,7 +118,6 @@ class OwnersController extends Controller
     {
         // $idがあれば代入　なければ 404
         $owner = Owner::findOrFail($id);
-        // dd($owner);
 
         return view('admin.owners.edit', compact('owner'));
     }
@@ -156,7 +131,7 @@ class OwnersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // 保存処理
         $owner = Owner::findOrFail($id);
         $owner->name = $request->name;
         $owner->email = $request->email;

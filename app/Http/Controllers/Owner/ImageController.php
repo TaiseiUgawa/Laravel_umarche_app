@@ -20,10 +20,7 @@ class ImageController extends Controller
 
         #クロージャー
         $this->middleware(function ($request, $next) {
-            //文字列
-            // dd($request->route()->parameter('shop'));
 
-            //
             $id = $request->route()->parameter('image');
 
             if(!is_null($id))
@@ -46,7 +43,6 @@ class ImageController extends Controller
      */
     public function index()
     {
-        //
         $images = Image::where('owner_id', Auth::id())
         ->orderBy('created_at', 'desc')
         ->paginate(20);
@@ -88,7 +84,7 @@ class ImageController extends Controller
                     'filename' => $fileNameToStore,
                 ]);
             }
-            // dd('作成完了');
+            
             //リダイレクト処理
             return redirect()
             ->route('owner.images.index')

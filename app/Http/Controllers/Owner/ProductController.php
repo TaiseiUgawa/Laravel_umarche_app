@@ -49,7 +49,6 @@ class ProductController extends Controller
     public function index()
     {
         //shopからproductのリレーションミスエラー　　belongsTo => hasMany　
-        // $products = Owner::findOrFail(Auth::id())->shop->product;
 
         // N+1問題改善　with()
         $ownerInfo = Owner::with('shop.product.imageFirst')
@@ -224,7 +223,6 @@ class ProductController extends Controller
                 Log::error($e);
                 throw $e;
             }
-
             // 登録後のリダイレクト処理
             return redirect()->route('owner.products.index')
             ->with(['message' => '商品情報を更新しました。',
@@ -240,7 +238,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-
         // 選択商品削除
         Product::findOrFail($id)->delete();
 

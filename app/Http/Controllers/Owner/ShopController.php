@@ -18,13 +18,9 @@ class ShopController extends Controller
     {
         // 認証情報
         $this->middleware('auth:owners');
-
         #クロージャー
         $this->middleware(function ($request, $next) {
-            //文字列
-            // dd($request->route()->parameter('shop'));
 
-            //
             $id = $request->route()->parameter('shop');
             if(!is_null($id))
             {
@@ -57,7 +53,6 @@ class ShopController extends Controller
     {
 
         $shop = Shop::findOrFail($id);
-        // dd(Shop::findOrFail($id));
 
         return view('owner.shops.edit', compact('shop'));
     }
