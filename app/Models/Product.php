@@ -69,6 +69,7 @@ class Product extends Model
         ->withPivot(['id', 'quantity']);
     }
 
+    // 商品表示
     public function scopeAvailableItems($query)
     {
         // 在庫数が１より大きいデータ
@@ -87,5 +88,25 @@ class Product extends Model
         ->select('products.id as id', 'products.name as name', 'products.price','products.sort_order as sort_order','products.information','secondary_categories.name as category','image1.filename as filename')
         ->where('shops.is_selling', true)
         ->where('products.is_selling', true);
+    }
+
+    // 商品表示順
+    public function scopeSortOrder($query, $sortOrder)
+    {
+        if($sortOrder === null || $sortOrder === \Constant::SORT_ORDER['recommend']){
+            return $query->orderby('sort_order', 'asc');
+        }
+        if($sortOrder === \Constant::SORT_ORDER['higherPrice']){
+            return $query->orderby('price', 'desc');
+        }
+        if($sortOrder === \Constant::SORT_ORDER['lowerPrice']){
+            return $query->orderby('price', 'asc');
+        }
+        if($sortOrder === \Constant::SORT_ORDER['later']){
+            return $query->orderby('products.created_at', 'desc');
+        }
+        if($sortOrder === \Constant::SORT_ORDER['older']){
+            return $query->orderby('products.created_at', 'asc');
+        }
     }
 }

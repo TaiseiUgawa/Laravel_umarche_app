@@ -16,8 +16,8 @@ class ItemController extends Controller
 
         $this->middleware(function ($request, $next) {
 
+            // 販売停止だと404ページを返す
             $id = $request->route()->parameter('item');
-
             if(!is_null($id))
             {
                 $itemId = Product::availableItems()->where('product_id', $id)->exists();
@@ -28,10 +28,10 @@ class ItemController extends Controller
         });
     }
     //
-    public function index()
+    public function index(Request $request)
     {
-        // ローカルスコープ
-        $products = Product::availableItems()->get();
+        $products = Product::availableItems()
+        ->sortOrder($request->sort)->get();
 
         return view('user.index', compact('products'));
     }
@@ -42,9 +42,7 @@ class ItemController extends Controller
         // 数量
         $quantity = Stock::where('product_id', $product->id)->sum('quantity');
         // 数量max
-        if($quantity > 9){
-            $quantity = 9;
-        }
+        if($quantity > 9) { $quantity = 9; }
 
         return view('user.show', compact('product', 'quantity'));
     }
