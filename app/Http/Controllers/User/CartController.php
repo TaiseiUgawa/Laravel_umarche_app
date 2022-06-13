@@ -8,6 +8,9 @@ use App\Models\Cart;
 use App\Models\User;
 use App\Models\Stock;
 use Illuminate\Support\Facades\Auth;
+use App\Services\CartService;
+use App\Jobs\SendThanksMail;
+use App\Jobs\SendOrderedMail;
 
 class CartController extends Controller
 {
@@ -73,10 +76,7 @@ class CartController extends Controller
         $lineItems = [];
         foreach($products as $product)
         {
-
             $quantity = Stock::where('product_id', $product->id)->sum('quantity');
-
-
             // 決済前在庫確認処理
             if($product->pivot->quantity > $quantity){
                 return redirect()->route('user.cart.index');
@@ -100,10 +100,6 @@ class CartController extends Controller
                     'quantity' => $product->pivot->quantity * -1,
                 ]);
             }
-
-
-
-
             // This is your test secret API key.
             \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
@@ -127,6 +123,14 @@ class CartController extends Controller
     // 決済完了後の処理
     public function success()
     {
+        $items = Cart::where('user_id', Auth::id())->get();
+        $products = CartService::getItemsInCart($items);
+        $user = User::findOrFail(Auth::id());
+
+        SendThanksMail::dispatch($products, $user);
+        foreach ($products as $product ) {
+            SendOrderedMail::dispatch($product, $user);
+        }
         Cart::where('user_id', Auth::id())->delete();
 
         return redirect()->route('user.items.index');
